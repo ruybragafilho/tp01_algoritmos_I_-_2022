@@ -6,7 +6,7 @@ OUTPUT_DIR    =  .
 
 
 CPP = g++
-CPPFLAGS = -Wall   -Werror  
+CPPFLAGS = -std=c++11  -Wall   -Werror  
 
 
 
