@@ -11,8 +11,8 @@ CPPFLAGS = -std=c++11  -Wall   -Werror
 
 
 
-Compile:  Ponto2D  TipoItem  Loja  Cliente  Principal
-	$(CPP)   -o   $(BIN_DIR)/tp1   $(OBJECT_DIR)/Ponto2D.o   $(OBJECT_DIR)/TipoItem.o   $(OBJECT_DIR)/Loja.o   $(OBJECT_DIR)/Cliente.o   $(OBJECT_DIR)/CasamentoEstavel.o   $(OBJECT_DIR)/main.o
+Compile:  Ponto2D  TipoItem  Bicicleta  Cliente  Principal
+	$(CPP)   -o   $(BIN_DIR)/tp1   $(OBJECT_DIR)/Ponto2D.o   $(OBJECT_DIR)/TipoItem.o   $(OBJECT_DIR)/Bicicleta.o   $(OBJECT_DIR)/Pessoa.o   $(OBJECT_DIR)/CasamentoEstavel.o   $(OBJECT_DIR)/main.o
 
 run:  $(BIN_DIR)/tp1
 	valgrind   $(BIN_DIR)/tp1 < caso_teste_01.txt
@@ -29,12 +29,12 @@ CasamentoEstavel:  $(SOURCE_DIR)/CasamentoEstavel.h  $(SOURCE_DIR)/CasamentoEsta
 	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/CasamentoEstavel.cpp   -o   $(OBJECT_DIR)/CasamentoEstavel.o	
 
 
-Cliente:  $(SOURCE_DIR)/Cliente.h  $(SOURCE_DIR)/Cliente.cpp
-	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/Cliente.cpp   -o   $(OBJECT_DIR)/Cliente.o	
+Pessoa:  $(SOURCE_DIR)/Pessoa.h  $(SOURCE_DIR)/Pessoa.cpp
+	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/Pessoa.cpp   -o   $(OBJECT_DIR)/Pessoa.o	
 
 
-Loja:  $(SOURCE_DIR)/Loja.h  $(SOURCE_DIR)/Loja.cpp
-	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/Loja.cpp   -o   $(OBJECT_DIR)/Loja.o	
+Bicicleta:  $(SOURCE_DIR)/Bicicleta.h  $(SOURCE_DIR)/Bicicleta.cpp
+	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/Bicicleta.cpp   -o   $(OBJECT_DIR)/Bicicleta.o	
 
 
 Ponto2D:  $(SOURCE_DIR)/Ponto2D.h  $(SOURCE_DIR)/Ponto2D.cpp
