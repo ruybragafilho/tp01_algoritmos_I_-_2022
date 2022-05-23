@@ -5,88 +5,122 @@
 
 
 #include "Ponto2D.h"
-#include "Loja.h"
-#include "Cliente.h"
+#include "Bicicleta.h"
+#include "Pessoa.h"
 #include "TipoLista.h"
-#include "CasamentoEstavel.h"
+//#include "CasamentoEstavel.h"
 
 #include <iostream>
 #include <string>
-#include <cmath>
+//#include <cmath>
+#include <array>
 
+using std::size_t;
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+using std::array;
 
+
+
+/* Prototipo da função que carrega o número de pessoas e bicicletas */
+void carregarNumeroDeEntidades( long& n );
 
 
 /* Prototipo da função que carrega as dimenções do grid */
-void carregarDimensoesGrid( long& n, long& m );
+void carregarDimensoesGrid( long& linhas, long& colunas );
+
+/* Prototipo da função que cria um mapa (grid) */
+char** criarMapa( long linhas, long colunas );
 
 
-/* Prototipo da função que carrega as lojas */
-void carregarLojas( TipoLista<Loja>& loja );
+/* Prototipo da função que carrega o mapa (grid) */
+void carregarMapa( char** mapa, long linhas, long colunas );
 
 
-/* Prototipo da função que carrega os clientes */
-void carregarClientes( TipoLista<Cliente>& cliente );
+/* Prototipo da função que mostra o mapa (grid) */
+void mostrarMapa( char** mapa, long linhas, long colunas );
 
 
-/* Prototipo da função que calcula o score_estado */
-long scoreEstado( string& uf );
+/* Prototipo da função que desaloca o mapa (grid) */
+void destruirMapa( char** mapa, long linhas );
 
 
-/* Prototipo da função que calcula o score_tipo_pagamento */
-long scoreTipoPagamento( string& u );
 
 
-/* Prototipo da função que carrega os clientes */
-double calcularTicket( long scoreEstado,
-                       long scoreTipoPagamento,
-                       long idade );
+
+/* Prototipo da função que carrega as bicicletas */
+void carregarBicicletas( TipoLista<Bicicleta>& bicicleta );
+
+
+/* Prototipo da função que carrega as pessoas */
+void carregarPessoas( TipoLista<Pessoa>& pessoa );
+
 
 
 /* Prototipo da função que imprime o resultado do casamento estavel de acordo com o TP.  */
-/* A função imprime a lista de clientes de cada loja.                                    */
-void imprimirCasamentoEstavel( TipoLista<Cliente>* match,
-                               long numLojas );                        
+/* A função imprime as pares Pessoa - Bicicleta.                                         */
+void imprimirCasamentoEstavel( TipoLista<Pessoa>* match );                        
 
 
 
 /* Definição da função main */
 int main()  {
 
+    cout << "\n\nInicio\n\n";
+
+
+    /* Número de Pessoas e Bicicletas */
+    long n;
+    carregarNumeroDeEntidades( n );
+    cout << "n: " << n;
+
 
     /* Dimensões do grid */
-    long n;
-    long m;
-    carregarDimensoesGrid( n, m );
+    long linhas = 0;
+    long colunas = 0;
+    carregarDimensoesGrid( linhas, colunas );
+    cout << "\nDimensoes Grid: (" << linhas << ", " << colunas << ")\n\n";
 
-    /* Lista de lojas */
-    TipoLista<Loja> loja;
-    carregarLojas( loja );
 
-    /* Lista de clientes */
-    TipoLista<Cliente> cliente;
-    carregarClientes( cliente );
+    /* Mapa */
+ 
+    char** mapa = criarMapa( linhas, colunas );
+
+    carregarMapa( mapa, linhas, colunas );
+    mostrarMapa( mapa, linhas, colunas );
+
+    destruirMapa( mapa, linhas );
+
+    cout << "\n\nFim\n\n";    
+
+
+
+    /* Lista de Bicicletas */
+//    TipoLista<Bicicleta> bicicleta;
+//    carregarBicicletas( bicicleta );
+
+    /* Lista de Pessoas */
+//    TipoLista<Pessoa> pessoa;
+//    carregarPessoas( pessoa );
    
 
     /* Tabela que conterá o resultado. Cada linha i da tabela representa */
-    /* a lista de clientes que foram alocados para a loja i.             */
-    TipoLista<Cliente>* match = new TipoLista<Cliente>[ loja.tamanhoLista() ];
+    /* o par Pessoa - Bicicleta.             */
+//    TipoLista<Pessoa>* match = new TipoLista<Cliente>[ loja.tamanhoLista() ];
 
     /* Criando uma instância do casamento estável */
-    CasamentoEstavel ce( &cliente, &loja );
+//    CasamentoEstavel ce( &cliente, &loja );
 
     /* Executa o algoritmo de Gale-Shapley */
-    ce.galeShapley( match );
+//    ce.galeShapley( match );
 
     /* Imprime o resultado */
-    imprimirCasamentoEstavel( match, loja.tamanhoLista() );
+//    imprimirCasamentoEstavel( match, loja.tamanhoLista() );
 
     /* Desalocando a tabela com o resultado do casamento estável */
-    delete[] match;
+//    delete[] match;
 
     return 0;
 
@@ -94,133 +128,147 @@ int main()  {
 
 
 
-
-/* Definição da função que carrega as dimenções do grid */
-void carregarDimensoesGrid( long& n, long& m )  {
+/* Definição da função que carrega o número de pessoas e bicicletas */
+void carregarNumeroDeEntidades( long& n )  {
 
     cin >> n;
-    cin >> m;
+
+}  /* Fim da definição da função carregarNumeroDeEntidades */
+
+
+
+/* Definição da função que carrega as dimenções do grid */
+void carregarDimensoesGrid( long& linhas, long& colunas )  {
+
+    cin >> linhas;
+    cin >> colunas;
 
 }  /* Fim da definição da função carregarDimensoesGrid */
 
 
+/* Definição da função que cria um mapa (grid) */
+char** criarMapa( long linhas, long colunas )  {
 
-/* Definição da função que carrega as lojas */
-void carregarLojas( TipoLista<Loja>& loja )  {
+    char** mapa = new char*[linhas];
 
-    long numLojas;
+    for( long i=0; i<linhas; ++i )  {
+        mapa[i] = new char[colunas];
+    }
 
-    long estoqueLoja;
-    long x;
-    long y; 
+    return mapa;
+}
 
-    // Carrega o número de lojas
-    cin >> numLojas;
 
-    // Carrega os dados de cada loja
-    for( long i=0; i<numLojas; ++i )  {
+/* Definição da função que carrega o mapa (grid) */
+void carregarMapa( char** mapa, long linhas, long colunas )  {
 
-        cin >> estoqueLoja;
-        cin >> x;
-        cin >> y;
+    if( mapa != nullptr )  {
 
-        Ponto2D p(x, y);
-        Loja l( i, estoqueLoja, p );
+        for( long i=0; i<linhas; ++i )  {
 
-        loja.inserirNoFim( l );
+            for( long j=0; j<colunas; ++j )  {
+                // mapa[i][j] = 'b';
+                cin >> mapa[i][j];
+            }
+        }
+    }
+}
+
+
+
+/* Prototipo da função que mostra o mapa (grid) */
+void mostrarMapa( char** mapa, long linhas, long colunas )  {
+
+    if( mapa != nullptr )  {
+
+        for( long i=0; i<linhas; ++i )  {
+    
+            for( long j=0; j<colunas; ++j )  {
+                cout << mapa[i][j] << ' ';            
+            }
+            cout << '\n';
+        }    
+    }
+}
+
+
+/* Prototipo da função que desaloca o mapa (grid) */
+void destruirMapa( char** mapa, long linhas )  {
+
+    if( mapa != nullptr )  {
+   
+        for( long i=0; i<linhas; ++i )  {
+    
+            delete[] mapa[i];        
+        }    
+        delete[] mapa;
+    }
+}
+
+
+
+/* Definição da função que carrega as bicicletas */
+void carregarBicicletas( TipoLista<Bicicleta>& bicicleta )  {
+
+    long numBicicletas;
+
+    long linha;
+    long coluna; 
+
+    // Carrega o número de bicicletas
+    cin >> numBicicletas;
+
+    // Carrega os dados de cada bicicleta
+    for( long i=0; i<numBicicletas; ++i )  {
+
+        cin >> linha;
+        cin >> coluna;
+
+        Ponto2D ponto(linha, coluna);
+        Bicicleta b( i, ponto );
+
+        bicicleta.inserirNoFim( b );
     }    
 
-}  /* Fim da definição da função carregarLojas */
+}  /* Fim da definição da função carregarBicicletas */
 
 
 
-/* Definição da função que carrega os clientes */
-void carregarClientes( TipoLista<Cliente>& cliente )  {
+/* Definição da função que carrega as pessoas */
+void carregarPessoas( TipoLista<Pessoa>& pessoa )  {
 
-    long numClientes;
+    long numPessoas;
 
-    long idade;
-    string uf;
-    string u;
-    long x;
-    long y; 
+    long linha;
+    long coluna; 
 
-    // Carrega o número de lojas
-    cin >> numClientes;
+    // Carrega o número de pessoas
+    cin >> numPessoas;
 
-    // Carrega os dados de cada loja
-    for( long i=0; i<numClientes; ++i )  {
+    // Carrega os dados de cada pessoa
+    for( long i=0; i<numPessoas; ++i )  {
 
-        cin >> idade;
-        cin >> uf;
-        cin >> u;
-        cin >> x;
-        cin >> y;
+        cin >> linha;
+        cin >> coluna;
 
-        Ponto2D p(x, y);
-        Cliente c( i, 
-                   calcularTicket( scoreEstado( uf ),
-                                   scoreTipoPagamento( u ),
-                                   idade ), 
-                   p );
+        Ponto2D ponto(linha , coluna);
+        Pessoa p( i, ponto );
 
-        cliente.inserirOrdenadoDecrescente( c );
+        pessoa.inserirOrdenadoDecrescente( p );
     }    
 
-}  /* Fim da definição da função carregarClientes */
-
-
-
-/* Definição da função que calcula o score_estado */
-long scoreEstado( string& uf )  {
-
-    if( uf == "MG" ) return 0;
-    if( uf == "PR" ) return 10;
-    if( uf == "SP" ) return 20;
-    if( uf == "SC" ) return 30;
-    if( uf == "RJ" ) return 40;
-    if( uf == "RN" ) return 50;
-    if( uf == "RS" ) return 60;
-
-    return -1;
-
-}  /* Fim da definição da função scoreEstado */
-
-
-
-/* Definição da função que calcula o score_tipo_pagamento */
-long scoreTipoPagamento( string& u )  {
-
-    if( u == "DINHEIRO" ) return 1;
-    if( u == "DEBITO" )   return 2;
-    if( u == "CREDITO" )  return 3;    
-
-    return -1;
-
-}  /* Fim da definição da função scoreTipoPagamento */
-
-
-
-/* Definição da função que carrega os clientes */
-double calcularTicket( long scoreEstado,
-                       long scoreTipoPagamento,
-                       long idade )  {
-
-    return ( abs(60 - idade) + scoreEstado) / static_cast<double>(scoreTipoPagamento);
-
-}  /* Fim da definição da função calcularTicket */
-
+}  /* Fim da definição da função carregarPessoas */
 
 
 /* Definição da função que imprime o resultado do casamento estavel de acordo com o TP.  */
 /* A função imprime a lista de clientes de cada loja.                                    */
-void imprimirCasamentoEstavel( TipoLista<Cliente>* match,
-                               long numLojas )  {
+//void imprimirCasamentoEstavel( TipoLista<Cliente>* match,
+//                               long numLojas )  {
 
-    for( long i=0; i<numLojas; ++i )  {
+//    for( long i=0; i<numLojas; ++i )  {
 
-        cout << i << endl;
-        match[i].imprimir();
-    }
+//        cout << i << endl;
+//        match[i].imprimir();
+//    }
 
-}  /* Fim da definição da função imprimirCasamentoEstavel */                        
+//}  /* Fim da definição da função imprimirCasamentoEstavel */                        

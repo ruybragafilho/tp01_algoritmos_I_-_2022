@@ -11,8 +11,9 @@ CPPFLAGS = -std=c++11  -Wall   -Werror
 
 
 
-Compile:  Ponto2D  TipoItem  Bicicleta  Cliente  Principal
-	$(CPP)   -o   $(BIN_DIR)/tp1   $(OBJECT_DIR)/Ponto2D.o   $(OBJECT_DIR)/TipoItem.o   $(OBJECT_DIR)/Bicicleta.o   $(OBJECT_DIR)/Pessoa.o   $(OBJECT_DIR)/CasamentoEstavel.o   $(OBJECT_DIR)/main.o
+Compile:  Ponto2D  TipoItem  Bicicleta  Pessoa  Principal
+	$(CPP)   -o   $(BIN_DIR)/tp1   $(OBJECT_DIR)/Ponto2D.o   $(OBJECT_DIR)/TipoItem.o   $(OBJECT_DIR)/Bicicleta.o   $(OBJECT_DIR)/Pessoa.o   $(OBJECT_DIR)/main.o
+#	$(CPP)   -o   $(BIN_DIR)/tp1   $(OBJECT_DIR)/Ponto2D.o   $(OBJECT_DIR)/TipoItem.o   $(OBJECT_DIR)/Bicicleta.o   $(OBJECT_DIR)/Pessoa.o   $(OBJECT_DIR)/CasamentoEstavel.o   $(OBJECT_DIR)/main.o	
 
 run:  $(BIN_DIR)/tp1
 	valgrind   $(BIN_DIR)/tp1 < caso_teste_01.txt
@@ -21,7 +22,8 @@ run:  $(BIN_DIR)/tp1
 
 
 
-Principal:  Ponto2D  Loja  Cliente CasamentoEstavel  $(SOURCE_DIR)/main.cpp
+#Principal:  Ponto2D  Loja  Cliente CasamentoEstavel  $(SOURCE_DIR)/main.cpp
+Principal:  Ponto2D  TipoItem  Bicicleta  Pessoa $(SOURCE_DIR)/main.cpp
 	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/main.cpp   -o   $(OBJECT_DIR)/main.o
 
 
