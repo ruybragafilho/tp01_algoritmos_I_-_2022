@@ -7,6 +7,7 @@
 #include "Ponto2D.h"
 #include "Bicicleta.h"
 #include "Pessoa.h"
+#include "TipoItem.h"
 #include "TipoLista.h"
 //#include "CasamentoEstavel.h"
 
@@ -47,15 +48,17 @@ void mostrarMapa( char** mapa, long linhas, long colunas );
 void destruirMapa( char** mapa, long linhas );
 
 
+/* Prototipo da função que carrega a tabela de preferência das pessoas pelas bicicletas */
+TipoLista<TipoItem>* carregarTabelaPreferenciaDasPessoas( long numEntidades );
 
 
 
 /* Prototipo da função que carrega as bicicletas */
-void carregarBicicletas( TipoLista<Bicicleta>& bicicleta );
+void carregarBicicletas( TipoLista<Bicicleta>& bicicleta, long numBicicletas );
 
 
 /* Prototipo da função que carrega as pessoas */
-void carregarPessoas( TipoLista<Pessoa>& pessoa );
+void carregarPessoas( TipoLista<Pessoa>& pessoa, long numPessoas );
 
 
 
@@ -93,18 +96,33 @@ int main()  {
 
     destruirMapa( mapa, linhas );
 
-    cout << "\n\nFim\n\n";    
-
 
 
     /* Lista de Bicicletas */
-//    TipoLista<Bicicleta> bicicleta;
-//    carregarBicicletas( bicicleta );
+    TipoLista<Bicicleta> bicicleta;
+    carregarBicicletas( bicicleta, n );
+
+    cout << "\n\n Lista de Bicicletas\n";
+    bicicleta.imprimir();
+
 
     /* Lista de Pessoas */
-//    TipoLista<Pessoa> pessoa;
-//    carregarPessoas( pessoa );
+    TipoLista<Pessoa> pessoa;
+    carregarPessoas( pessoa, n );
+
+    cout << "\n\n Lista de Pessoas\n";
+    pessoa.imprimir(); 
+
+       
    
+    /* Tabela de Preferencia Das Pessoas por bicicletas */
+    TipoLista<TipoItem>* tabelaPreferenciaDasPessoas = carregarTabelaPreferenciaDasPessoas( n );
+    cout << "\n\nTabela de Preferências das Pessoas\n"; 
+    for(long i=0; i<n; ++i)  {
+
+        tabelaPreferenciaDasPessoas[i].imprimir();        
+    }
+    if( tabelaPreferenciaDasPessoas != nullptr ) delete[] tabelaPreferenciaDasPessoas;
 
     /* Tabela que conterá o resultado. Cada linha i da tabela representa */
     /* o par Pessoa - Bicicleta.             */
@@ -121,6 +139,9 @@ int main()  {
 
     /* Desalocando a tabela com o resultado do casamento estável */
 //    delete[] match;
+
+   
+    cout << "\n\nFim\n\n";    
 
     return 0;
 
@@ -156,7 +177,7 @@ char** criarMapa( long linhas, long colunas )  {
     }
 
     return mapa;
-}
+}  /* Fim da definição da função criarMapa */
 
 
 /* Definição da função que carrega o mapa (grid) */
@@ -172,11 +193,11 @@ void carregarMapa( char** mapa, long linhas, long colunas )  {
             }
         }
     }
-}
+}  /* Fim da definição da função carregarMapa */
 
 
 
-/* Prototipo da função que mostra o mapa (grid) */
+/* Definição da função que mostra o mapa (grid) */
 void mostrarMapa( char** mapa, long linhas, long colunas )  {
 
     if( mapa != nullptr )  {
@@ -189,10 +210,10 @@ void mostrarMapa( char** mapa, long linhas, long colunas )  {
             cout << '\n';
         }    
     }
-}
+}  /* Fim da definição da função mostrarMapa */
 
 
-/* Prototipo da função que desaloca o mapa (grid) */
+/* Definição da função que desaloca o mapa (grid) */
 void destruirMapa( char** mapa, long linhas )  {
 
     if( mapa != nullptr )  {
@@ -203,28 +224,48 @@ void destruirMapa( char** mapa, long linhas )  {
         }    
         delete[] mapa;
     }
-}
+}  /* Fim da definição da função destruirMapa */
+
+
+/* Definição da função que carrega a tabela de preferência das pessoas pelas bicicletas */
+TipoLista<TipoItem>* carregarTabelaPreferenciaDasPessoas( long numEntidades )  {
+
+    TipoLista<TipoItem>* tabelaPreferenciaPessoas = new TipoLista<TipoItem>[numEntidades];
+    long preferencia;
+
+    for( long i=0; i<numEntidades; ++i ) {
+
+        for( long j=0; j<numEntidades; ++j ) {
+           
+            cin >> preferencia;
+            TipoItem preferenciaBike( j, preferencia );
+            tabelaPreferenciaPessoas[i].inserirOrdenadoDecrescente( preferenciaBike );                
+        }        
+    }    
+
+    return tabelaPreferenciaPessoas;
+
+}  /* Fim da definição da função carregarTabelaPreferenciaDasPessoas */
+
+
+/* Definição da função que desaloca a memória da tabela de preferência das pessoas pelas bicicletas */
+void desalocarTabela( TipoLista<TipoItem>* tabela )  {
+
+    delete[] tabela;
+
+}  /* Fim da definição da função desalocarTabelaPreferenciaDasPessoas */
+
+
 
 
 
 /* Definição da função que carrega as bicicletas */
-void carregarBicicletas( TipoLista<Bicicleta>& bicicleta )  {
-
-    long numBicicletas;
-
-    long linha;
-    long coluna; 
-
-    // Carrega o número de bicicletas
-    cin >> numBicicletas;
+void carregarBicicletas( TipoLista<Bicicleta>& bicicleta, long numBicicletas  )  {
 
     // Carrega os dados de cada bicicleta
     for( long i=0; i<numBicicletas; ++i )  {
 
-        cin >> linha;
-        cin >> coluna;
-
-        Ponto2D ponto(linha, coluna);
+        Ponto2D ponto;
         Bicicleta b( i, ponto );
 
         bicicleta.inserirNoFim( b );
@@ -235,26 +276,15 @@ void carregarBicicletas( TipoLista<Bicicleta>& bicicleta )  {
 
 
 /* Definição da função que carrega as pessoas */
-void carregarPessoas( TipoLista<Pessoa>& pessoa )  {
-
-    long numPessoas;
-
-    long linha;
-    long coluna; 
-
-    // Carrega o número de pessoas
-    cin >> numPessoas;
+void carregarPessoas( TipoLista<Pessoa>& pessoa, long numPessoas )  {
 
     // Carrega os dados de cada pessoa
     for( long i=0; i<numPessoas; ++i )  {
 
-        cin >> linha;
-        cin >> coluna;
-
-        Ponto2D ponto(linha , coluna);
+        Ponto2D ponto;
         Pessoa p( i, ponto );
 
-        pessoa.inserirOrdenadoDecrescente( p );
+        pessoa.inserirNoFim( p );
     }    
 
 }  /* Fim da definição da função carregarPessoas */
