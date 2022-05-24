@@ -53,6 +53,7 @@ class TipoItem   {
         /* Sobrecarga de operadores relacionais */
         bool operator<=(TipoItem& i) const;
         bool operator>=(TipoItem& i) const;              
+        bool operator==(TipoItem& i) const;
 };
 
 

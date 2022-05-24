@@ -43,6 +43,12 @@ Ponto2D:  $(SOURCE_DIR)/Ponto2D.h  $(SOURCE_DIR)/Ponto2D.cpp
 	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/Ponto2D.cpp   -o   $(OBJECT_DIR)/Ponto2D.o	
 
 
+TesteTipoGrafo:  TipoItem  $(SOURCE_DIR)/TipoLista.h  $(SOURCE_DIR)/TipoGrafo.h
+	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/TesteTipoGrafo.cpp   -o   $(OBJECT_DIR)/TesteTipoGrafo.o	
+	$(CPP)   -o   $(BIN_DIR)/testeTipoGrafo.bin   $(OBJECT_DIR)/TesteTipoGrafo.o   $(OBJECT_DIR)/TipoItem.o
+	valgrind   $(BIN_DIR)/testeTipoGrafo.bin	
+
+
 TesteTipoLista2:  TipoItem  $(SOURCE_DIR)/TipoLista.h  $(SOURCE_DIR)/TesteTipoLista2.cpp
 	$(CPP)   $(CPPFLAGS)   -c   $(SOURCE_DIR)/TesteTipoLista2.cpp   -o   $(OBJECT_DIR)/TesteTipoLista2.o	
 	$(CPP)   -o   $(BIN_DIR)/testeTipoLista2.bin   $(OBJECT_DIR)/TesteTipoLista2.o   $(OBJECT_DIR)/TipoItem.o

@@ -52,5 +52,9 @@ bool TipoItem::operator>=(TipoItem& i) const  {
     return(  this->peso >= i.peso  );
 }
 
+bool TipoItem::operator==(TipoItem& i) const  {
+    return(  this->id == i.id  );
+}
+
 
 /*  Fim das definicoes dos métodos do tipo abstrato de dados TipoItem  */

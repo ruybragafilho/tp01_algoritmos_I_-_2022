@@ -11,8 +11,8 @@
 
 #include "TipoItem.h"
 #include "TipoLista.h"
-#include "Cliente.h"
-#include "Loja.h"
+#include "Pessoa.h"
+#include "Bicicleta.h"
 
 #include <vector>
 
